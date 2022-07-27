@@ -18,4 +18,8 @@ public interface ProfileService {
 	public void updateProfile(String id,ProfileDTO dto) throws profileException;
 	
 	public void deleteProfile(String id) throws profileException;
+	
+	public List<ProfileDTO> getProfilesByName(String name) throws profileException;
+	
+	public List<ProfileDTO> getProfilesByMentionedSkill(String skill) throws profileException;
 }

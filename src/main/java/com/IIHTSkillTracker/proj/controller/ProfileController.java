@@ -28,7 +28,7 @@ public class ProfileController {
 	@Autowired
 	private ProfileService profileService;
 
-	@GetMapping("/skill-tracker/api/v1/engineer/profiles")
+	@GetMapping("/skill-tracker/api/v1/admin/profiles")
 	public ResponseEntity<?> getAllProfiles(){
 		List<ProfileDTO> profiles = profileService.getAllProfiles();	
 		
@@ -48,10 +48,28 @@ public class ProfileController {
 	}
 	
 
-	@GetMapping("/skill-tracker/api/v1/engineer/profiles/{id}")
+	@GetMapping("/skill-tracker/api/v1/admin/ID/{id}")
 	public ResponseEntity<?> getProfilebyID(@PathVariable("id") String id){
 		try {
 			return new ResponseEntity<>(profileService.getProfile(id),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/skill-tracker/api/v1/admin/names/{name}")
+	public ResponseEntity<?> getProfilesbyStartingName(@PathVariable("name") String name){
+		try {
+			return new ResponseEntity<>(profileService.getProfilesByName(name),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/skill-tracker/api/v1/admin/skill/{skill}")
+	public ResponseEntity<?> getProfilesbySkillMatched(@PathVariable("skill") String skill){
+		try {
+			return new ResponseEntity<>(profileService.getProfilesByMentionedSkill(skill),HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
@@ -69,7 +87,7 @@ public class ProfileController {
 		}
 	}
 	
-	@DeleteMapping("/skill-tracker/api/v1/engineer/delete-profile/{id}")
+	@DeleteMapping("/skill-tracker/api/v1/admin/delete-profile/{id}")
 	public ResponseEntity<?> deleteByID(@PathVariable("id") String id){
 		try {
 			profileService.deleteProfile(id);

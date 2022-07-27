@@ -41,7 +41,7 @@ public class ProfileDTO {
 	
 	@Min(0) 
 	@Max(20)
-	private int html_css_javascript;
+	private int htmlcssjavascript;
 	
 	@Min(0) 
 	@Max(20)
@@ -127,11 +127,11 @@ public class ProfileDTO {
 	public void setDob(String dob) {
 		this.dob = dob;
 	}
-	public int getHtml_css_javascript() {
-		return html_css_javascript;
+	public int getHtmlcssjavascript() {
+		return htmlcssjavascript;
 	}
-	public void setHtml_css_javascript(int html_css_javascript) {
-		this.html_css_javascript = html_css_javascript;
+	public void setHtmlcssjavascript(int htmlcssjavascript) {
+		this.htmlcssjavascript = htmlcssjavascript;
 	}
 	public int getAngular() {
 		return angular;

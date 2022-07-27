@@ -15,6 +15,14 @@ public class profileException extends Exception{
 		return "Profile with id "+id+" not found";
 	}
 	
+	public static String NotFoundExceptionByName(String name) {
+		return "No Profile matches with name "+name;
+	}
+	
+	public static String NoMatchFoundException(String skill) {
+		return "No Profile matches with skill "+skill;
+	}
+	
 	public static String ProfileCannotBeUpdated(String id) {
 		return "Time gap between each update is 10 days. Therefore, profile with ID "+id+" cannot be updated!";
 	}

@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.IIHTSkillTracker.proj.exception.profileException;
@@ -78,7 +79,7 @@ public class ProfileServiceImpl implements ProfileService {
 				profile.setDocker(newProfile.getDocker()>0?newProfile.getDocker():profile.getDocker());
 				profile.setGit(newProfile.getGit()>0?newProfile.getGit():profile.getDocker());
 				profile.setHibernate(newProfile.getHibernate()>0?newProfile.getHibernate():profile.getHibernate());
-				profile.setHtml_css_javascript(newProfile.getHtml_css_javascript()>0?newProfile.getHtml_css_javascript():profile.getHtml_css_javascript());
+				profile.setHtmlcssjavascript(newProfile.getHtmlcssjavascript()>0?newProfile.getHtmlcssjavascript():profile.getHtmlcssjavascript());
 				profile.setJenkins(newProfile.getJenkins()>0?newProfile.getJenkins():profile.getJenkins());
 				profile.setReact(newProfile.getReact()>0?newProfile.getReact():profile.getReact());
 				profile.setRestful(newProfile.getRestful()>0?newProfile.getRestful():profile.getRestful());
@@ -107,6 +108,84 @@ public class ProfileServiceImpl implements ProfileService {
 			profileRepo.delete(profile.get());
 		}else {
 			throw new profileException(profileException.NotFoundException(id));
+		}
+	}
+
+	@Override
+	public List<ProfileDTO> getProfilesByName(String name) throws profileException {
+		List<ProfileDTO> profiles = profileRepo.findByNameStartsWithIgnoreCase(name);
+		if(profiles.size()>0) {
+			return profiles;
+		}else {
+			throw new profileException(profileException.NotFoundExceptionByName(name));
+		}
+	}
+
+	@Override
+	public List<ProfileDTO> getProfilesByMentionedSkill(String skill) throws profileException {
+		// TODO Auto-generated method stub
+		List<ProfileDTO> profiles = new ArrayList<ProfileDTO>();
+		switch (skill) {
+	        case "htmlcssjavascript":
+	        	profiles.addAll(profileRepo.findByHtmlcssjavascriptGreaterThanOrderByHtmlcssjavascriptDesc(10));
+//	            System.out.println("html");
+	            break;
+	        case "angular":
+	        	profiles.addAll(profileRepo.findByAngularGreaterThanOrderByAngularDesc(10));
+//	        	System.out.println("angular");
+	            break;
+	        case "react":
+	        	profiles.addAll(profileRepo.findByReactGreaterThanOrderByReactDesc(10));
+//	            System.out.println("react");
+	            break;
+	        case "spring":
+	        	profiles.addAll(profileRepo.findBySpringGreaterThanOrderBySpringDesc(10));
+//	            System.out.println("spring");
+	            break;
+	        case "restful":
+	        	profiles.addAll(profileRepo.findByRestfulGreaterThanOrderByRestfulDesc(10));
+//	        	System.out.println("restful");
+	            break;
+	        case "hibernate":
+	        	profiles.addAll(profileRepo.findByHibernateGreaterThanOrderByHibernateDesc(10));
+//	            System.out.println("hibernate");
+	            break;
+	        case "git":
+	        	profiles.addAll(profileRepo.findByGitGreaterThanOrderByGitDesc(10));
+//	            System.out.println("git");
+	            break;
+	        case "docker":
+	        	profiles.addAll(profileRepo.findByDockerGreaterThanOrderByDockerDesc(10));
+//	        	System.out.println("docker");
+	            break;
+	        case "jenkins":
+	        	profiles.addAll(profileRepo.findByJenkinsGreaterThanOrderByJenkinsDesc(10));
+//	            System.out.println("jenkins");
+	            break;
+	        case "aws":
+	        	profiles.addAll(profileRepo.findByAwsGreaterThanOrderByAwsDesc(10));
+//	            System.out.println("aws");
+	            break;
+	        case "spoken":
+	        	profiles.addAll(profileRepo.findBySpokenGreaterThanOrderBySpokenDesc(10));
+//	        	System.out.println("spoken");
+	            break;
+	        case "communication":
+	        	profiles.addAll(profileRepo.findByCommunicationGreaterThanOrderByCommunicationDesc(10));
+//	            System.out.println("communication");
+	            break;
+	        case "aptitude":
+	        	profiles.addAll(profileRepo.findByAptitudeGreaterThanOrderByAptitudeDesc(10));
+//	            System.out.println("aptitude");
+	            break;
+	        default:
+	        	break;
+//	            throw new profileException(profileException.NoMatchFoundException(skill));
+        }
+		if(profiles.size()>0) {
+			return profiles;
+		}else {
+			throw new profileException(profileException.NoMatchFoundException(skill));
 		}
 	}
 	
