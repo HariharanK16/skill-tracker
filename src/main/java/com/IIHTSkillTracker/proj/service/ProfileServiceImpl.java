@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.concurrent.TimeUnit;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,26 +65,35 @@ public class ProfileServiceImpl implements ProfileService {
 		Optional<ProfileDTO> profileFind = profileRepo.findById(id);
 		if(profileFind.isPresent()) {
 			ProfileDTO profile = profileFind.get();
-			
-			profile.setAngular(newProfile.getAngular()>0?newProfile.getAngular():profile.getAngular());
-			profile.setAws(newProfile.getAws()>0 ? newProfile.getAws():profile.getAws());
-			profile.setDocker(newProfile.getDocker()>0?newProfile.getDocker():profile.getDocker());
-			profile.setGit(newProfile.getGit()>0?newProfile.getGit():profile.getDocker());
-			profile.setHibernate(newProfile.getHibernate()>0?newProfile.getHibernate():profile.getHibernate());
-			profile.setHtml_css_javascript(newProfile.getHtml_css_javascript()>0?newProfile.getHtml_css_javascript():profile.getHtml_css_javascript());
-			profile.setJenkins(newProfile.getJenkins()>0?newProfile.getJenkins():profile.getJenkins());
-			profile.setReact(newProfile.getReact()>0?newProfile.getReact():profile.getReact());
-			profile.setRestful(newProfile.getRestful()>0?newProfile.getRestful():profile.getRestful());
-			profile.setSpring(newProfile.getSpring()>0?newProfile.getSpring():profile.getSpring());
-			
-			profile.setSpoken(newProfile.getSpoken()>0?newProfile.getSpoken():profile.getSpoken());
-			profile.setCommunication(newProfile.getCommunication()>0?newProfile.getCommunication():profile.getCommunication());
-			profile.setAptitude(newProfile.getAptitude()>0?newProfile.getAptitude():profile.getAptitude());
-					
-			profile.setUpdatedAt(new Date(System.currentTimeMillis()));
-			
-			profileRepo.save(profile);
+			Date currTime = new Date(System.currentTimeMillis());
+			long diff = currTime.getTime() - profile.getUpdatedAt().getTime();
 
+	        TimeUnit time = TimeUnit.DAYS; 
+	        long difference = time.convert(diff, TimeUnit.MILLISECONDS);
+//	        System.out.println("The difference in days is : "+difference);
+	        
+			if(profile.getUpdatedAt()==null || difference>10) {
+				profile.setAngular(newProfile.getAngular()>0?newProfile.getAngular():profile.getAngular());
+				profile.setAws(newProfile.getAws()>0 ? newProfile.getAws():profile.getAws());
+				profile.setDocker(newProfile.getDocker()>0?newProfile.getDocker():profile.getDocker());
+				profile.setGit(newProfile.getGit()>0?newProfile.getGit():profile.getDocker());
+				profile.setHibernate(newProfile.getHibernate()>0?newProfile.getHibernate():profile.getHibernate());
+				profile.setHtml_css_javascript(newProfile.getHtml_css_javascript()>0?newProfile.getHtml_css_javascript():profile.getHtml_css_javascript());
+				profile.setJenkins(newProfile.getJenkins()>0?newProfile.getJenkins():profile.getJenkins());
+				profile.setReact(newProfile.getReact()>0?newProfile.getReact():profile.getReact());
+				profile.setRestful(newProfile.getRestful()>0?newProfile.getRestful():profile.getRestful());
+				profile.setSpring(newProfile.getSpring()>0?newProfile.getSpring():profile.getSpring());
+				
+				profile.setSpoken(newProfile.getSpoken()>0?newProfile.getSpoken():profile.getSpoken());
+				profile.setCommunication(newProfile.getCommunication()>0?newProfile.getCommunication():profile.getCommunication());
+				profile.setAptitude(newProfile.getAptitude()>0?newProfile.getAptitude():profile.getAptitude());
+						
+				profile.setUpdatedAt(new Date(System.currentTimeMillis()));
+				
+				profileRepo.save(profile);
+			}else {
+				throw new profileException(profileException.ProfileCannotBeUpdated(id));
+			}
 		}else {
 			throw new profileException(profileException.NotFoundException(id));
 		}
