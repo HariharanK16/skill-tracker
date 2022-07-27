@@ -1,6 +1,11 @@
 package com.IIHTSkillTracker.proj.model;
 
 import java.util.Date;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,36 +13,89 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class ProfileDTO {
 	@Id
+	@Size(max=30,min=5,message="ID length should be between 5-30")
+	@NotNull(message = "ID Cannot be null")
 	private String id;
+	
+	@Size(max=30,min=5,message="Name length should be between 5-30")
+	@NotNull(message = "Name Cannot be null")
 	private String name;
+	
+	@Email(message = "Email ID is not valid",regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
+	        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
+	@NotNull(message = "Email Cannot be null")
 	private String email;
+	
+	@Size(max=10,min=10,message="Number length should be 10")
+	@NotNull(message = "Mobile Cannot be null")
 	private String mobile;
+	
+	@NotNull(message = "Role Cannot be null")
 	private String role;
+	
+	@NotNull(message = "DOB Cannot be null")
 	private String dob;
 	
 	private Date createdAt;
 	private Date updatedAt;
 	
+	@Min(0) 
+	@Max(20)
 	private int html_css_javascript;
+	
+	@Min(0) 
+	@Max(20)
 	private int angular;
+	
+	@Min(0) 
+	@Max(20)
 	private int react;
+	
+	@Min(0) 
+	@Max(20)
 	private int spring;
+	
+	@Min(0) 
+	@Max(20)
 	private int restful;
+	
+	@Min(0) 
+	@Max(20)
 	private int hibernate;
+	
+	@Min(0) 
+	@Max(20)
 	private int git;
+	
+	@Min(0) 
+	@Max(20)
 	private int docker;
+	
+	@Min(0) 
+	@Max(20)
 	private int jenkins;
+	
+	@Min(0) 
+	@Max(20)
 	private int aws;
 	
+	@Min(0) 
+	@Max(20)
 	private int spoken;
+	
+	@Min(0) 
+	@Max(20)
 	private int communication;
+	
+	@Min(0) 
+	@Max(20)
 	private int aptitude;
 
 	public String getId() {
 		return id;
 	}
 	public void setId() {
-		this.id = this.name+this.dob.replaceAll("[^a-zA-Z0-9]", "");
+		this.id = "CTS-"+this.name+"-"+this.dob.replaceAll("[^a-zA-Z0-9]", "");
 	}
 	public String getName() {
 		return name;
