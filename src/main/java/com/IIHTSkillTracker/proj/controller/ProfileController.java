@@ -31,14 +31,21 @@ public class ProfileController {
 	@Autowired
 	private ProfileService profileService;
 	
+//	@GetMapping("/profiles")
+//	public ResponseEntity<?> getAllProfiles(){
+//		List<ProfileDTO> profiles = profileRepo.findAll();	
+//		if(profiles.size()>0) {
+//			return new ResponseEntity<List<ProfileDTO>>(profiles,HttpStatus.OK);
+//		}else {
+//			return new ResponseEntity<>("No profiles available",HttpStatus.NOT_FOUND);
+//		}
+//	}
+	
 	@GetMapping("/profiles")
 	public ResponseEntity<?> getAllProfiles(){
-		List<ProfileDTO> profiles = profileRepo.findAll();	
-		if(profiles.size()>0) {
-			return new ResponseEntity<List<ProfileDTO>>(profiles,HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>("No profiles available",HttpStatus.NOT_FOUND);
-		}
+		List<ProfileDTO> profiles = profileService.getAllProfiles();	
+		
+		return new ResponseEntity<List<ProfileDTO>>(profiles,profiles.size()>0 ? HttpStatus.OK:HttpStatus.NOT_FOUND); 
 	}
 	
 //	@PostMapping("/profiles")
@@ -65,52 +72,83 @@ public class ProfileController {
 		}
 	}
 	
+//	@GetMapping("/profiles/{id}")
+//	public ResponseEntity<?> getProfilebyID(@PathVariable("id") String id){
+//		Optional<ProfileDTO> profile = profileRepo.findById(id);
+//		if(profile.isPresent()) {
+//			return new ResponseEntity<>(profile.get(),HttpStatus.OK);
+//		}else {
+//			return new ResponseEntity<>("No profiles available with id "+id,HttpStatus.NOT_FOUND);
+//		}
+//	}
+	
 	@GetMapping("/profiles/{id}")
 	public ResponseEntity<?> getProfilebyID(@PathVariable("id") String id){
-		Optional<ProfileDTO> profile = profileRepo.findById(id);
-		if(profile.isPresent()) {
-			return new ResponseEntity<>(profile.get(),HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>("No profiles available with id "+id,HttpStatus.NOT_FOUND);
+		try {
+			return new ResponseEntity<>(profileService.getProfile(id),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
 	}
 	
+//	@PutMapping("/profiles/{id}")
+//	public ResponseEntity<?> updateProfilebyID(@PathVariable("id") String id,@RequestBody ProfileDTO newProfile){
+//		Optional<ProfileDTO> profileO = profileRepo.findById(id);
+//		if(profileO.isPresent()) {
+////			System.out.println(newProfile.getAngular());
+//			ProfileDTO profile = profileO.get();
+//			profile.setAngular(newProfile.getAngular()>0?newProfile.getAngular():profile.getAngular());
+//			profile.setAws(newProfile.getAws()>0 ? newProfile.getAws():profile.getAws());
+//			profile.setDocker(newProfile.getDocker()>0?newProfile.getDocker():profile.getDocker());
+//			profile.setGit(newProfile.getGit()>0?newProfile.getGit():profile.getDocker());
+//			profile.setHibernate(newProfile.getHibernate()>0?newProfile.getHibernate():profile.getHibernate());
+//			profile.setHtml_css_javascript(newProfile.getHtml_css_javascript()>0?newProfile.getHtml_css_javascript():profile.getHtml_css_javascript());
+//			profile.setJenkins(newProfile.getJenkins()>0?newProfile.getJenkins():profile.getJenkins());
+//			profile.setReact(newProfile.getReact()>0?newProfile.getReact():profile.getReact());
+//			profile.setRestful(newProfile.getRestful()>0?newProfile.getRestful():profile.getRestful());
+//			profile.setSpring(newProfile.getSpring()>0?newProfile.getSpring():profile.getSpring());
+//			
+//			profile.setSpoken(newProfile.getSpoken()>0?newProfile.getSpoken():profile.getSpoken());
+//			profile.setCommunication(newProfile.getCommunication()>0?newProfile.getCommunication():profile.getCommunication());
+//			profile.setAptitude(newProfile.getAptitude()>0?newProfile.getAptitude():profile.getAptitude());
+//					
+//			profile.setUpdatedAt(new Date(System.currentTimeMillis()));
+//			
+//			profileRepo.save(profile);
+//			return new ResponseEntity<>(profileO.get(),HttpStatus.OK);
+//		}else {
+//			return new ResponseEntity<>("No profiles available with id "+id,HttpStatus.NOT_FOUND);
+//		}
+//	}
+	
 	@PutMapping("/profiles/{id}")
 	public ResponseEntity<?> updateProfilebyID(@PathVariable("id") String id,@RequestBody ProfileDTO newProfile){
-		Optional<ProfileDTO> profileO = profileRepo.findById(id);
-		if(profileO.isPresent()) {
-//			System.out.println(newProfile.getAngular());
-			ProfileDTO profile = profileO.get();
-			profile.setAngular(newProfile.getAngular()>0?newProfile.getAngular():profile.getAngular());
-			profile.setAws(newProfile.getAws()>0 ? newProfile.getAws():profile.getAws());
-			profile.setDocker(newProfile.getDocker()>0?newProfile.getDocker():profile.getDocker());
-			profile.setGit(newProfile.getGit()>0?newProfile.getGit():profile.getDocker());
-			profile.setHibernate(newProfile.getHibernate()>0?newProfile.getHibernate():profile.getHibernate());
-			profile.setHtml_css_javascript(newProfile.getHtml_css_javascript()>0?newProfile.getHtml_css_javascript():profile.getHtml_css_javascript());
-			profile.setJenkins(newProfile.getJenkins()>0?newProfile.getJenkins():profile.getJenkins());
-			profile.setReact(newProfile.getReact()>0?newProfile.getReact():profile.getReact());
-			profile.setRestful(newProfile.getRestful()>0?newProfile.getRestful():profile.getRestful());
-			profile.setSpring(newProfile.getSpring()>0?newProfile.getSpring():profile.getSpring());
-			
-			profile.setSpoken(newProfile.getSpoken()>0?newProfile.getSpoken():profile.getSpoken());
-			profile.setCommunication(newProfile.getCommunication()>0?newProfile.getCommunication():profile.getCommunication());
-			profile.setAptitude(newProfile.getAptitude()>0?newProfile.getAptitude():profile.getAptitude());
-					
-			profile.setUpdatedAt(new Date(System.currentTimeMillis()));
-			
-			profileRepo.save(profile);
-			return new ResponseEntity<>(profileO.get(),HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>("No profiles available with id "+id,HttpStatus.NOT_FOUND);
+		try {
+			profileService.updateProfile(id, newProfile);
+			return new ResponseEntity<>("Profile updated with id "+id,HttpStatus.OK);
+		}catch (ConstraintViolationException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+		}catch(profileException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
 	}
+	
+//	@DeleteMapping("profiles/{id}")
+//	public ResponseEntity<?> deleteByID(@PathVariable("id") String id){
+//		try {
+//			profileRepo.deleteById(id);
+//			return new ResponseEntity<>("Successfuly deleted with ID "+id,HttpStatus.OK);
+//		} catch (Exception e) {
+//			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+//		}
+//	}
 	
 	@DeleteMapping("profiles/{id}")
 	public ResponseEntity<?> deleteByID(@PathVariable("id") String id){
 		try {
-			profileRepo.deleteById(id);
+			profileService.deleteProfile(id);
 			return new ResponseEntity<>("Successfuly deleted with ID "+id,HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (profileException e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
 	}
