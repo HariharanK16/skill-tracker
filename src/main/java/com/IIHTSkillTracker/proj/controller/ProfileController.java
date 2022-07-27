@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +17,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.IIHTSkillTracker.proj.exception.profileException;
 import com.IIHTSkillTracker.proj.model.ProfileDTO;
 import com.IIHTSkillTracker.proj.repository.ProfileRepository;
+import com.IIHTSkillTracker.proj.service.ProfileService;
 
 @RestController
 public class ProfileController {
 	
 	@Autowired
 	private ProfileRepository profileRepo;
+	
+	@Autowired
+	private ProfileService profileService;
 	
 	@GetMapping("/profiles")
 	public ResponseEntity<?> getAllProfiles(){
@@ -34,15 +41,27 @@ public class ProfileController {
 		}
 	}
 	
+//	@PostMapping("/profiles")
+//	public ResponseEntity<?> createProfile(@RequestBody ProfileDTO profile){
+//		try {
+//			profile.setCreatedAt(new Date(System.currentTimeMillis()));
+//			profile.setId();
+//			profileRepo.save(profile);
+//			return new ResponseEntity<>(profile,HttpStatus.OK);
+//		}catch(Exception e) {
+//			return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
+	
 	@PostMapping("/profiles")
 	public ResponseEntity<?> createProfile(@RequestBody ProfileDTO profile){
 		try {
-			profile.setCreatedAt(new Date(System.currentTimeMillis()));
-			profile.setId();
-			profileRepo.save(profile);
+			profileService.CreateProfile(profile);
 			return new ResponseEntity<>(profile,HttpStatus.OK);
-		}catch(Exception e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}catch(ConstraintViolationException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+		} catch(profileException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
 		}
 	}
 	
