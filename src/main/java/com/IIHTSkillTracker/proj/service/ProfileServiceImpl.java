@@ -67,10 +67,12 @@ public class ProfileServiceImpl implements ProfileService {
 		if(profileFind.isPresent()) {
 			ProfileDTO profile = profileFind.get();
 			Date currTime = new Date(System.currentTimeMillis());
-			long diff = currTime.getTime() - profile.getUpdatedAt().getTime();
+			long diff = 0,difference = 0;
+			if(profile.getUpdatedAt()!=null) {
+				diff = currTime.getTime() - profile.getUpdatedAt().getTime();
 
 	        TimeUnit time = TimeUnit.DAYS; 
-	        long difference = time.convert(diff, TimeUnit.MILLISECONDS);
+	        difference = time.convert(diff, TimeUnit.MILLISECONDS);}
 //	        System.out.println("The difference in days is : "+difference);
 	        
 			if(profile.getUpdatedAt()==null || difference>10) {
