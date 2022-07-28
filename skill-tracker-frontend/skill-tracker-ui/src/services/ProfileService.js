@@ -14,6 +14,20 @@ class ProfileService{
     deleteProfileById(id){
         return axios.delete('http://localhost:8080/skill-tracker/api/v1/admin/delete-profile/'+id)
     }
+
+    getProfileById(id){
+        return axios.get('http://localhost:8080/skill-tracker/api/v1/admin/ID/'+id)
+    }
+
+    getProfileBySkill(skill){
+        return axios.get('http://localhost:8080/skill-tracker/api/v1/admin/skill/'+skill)
+    }
+
+    getProfileByName(name){
+        return axios.get('http://localhost:8080/skill-tracker/api/v1/admin/names/'+name)
+    }
+
+
 }
 
 export default new ProfileService();

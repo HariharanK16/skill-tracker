@@ -49,6 +49,14 @@ const AddProfileComponent = () => {
         <br/>
         <br/>
         <div className='container'>
+        <br/><br/>
+      <div className='row'>
+          <div className='form-group mb-2'>
+            
+                <Link to="/skill-tracker/api/v1/admin/profiles" className="btn btn-primary mb-2">Home</Link> 
+             </div>
+           </div>
+           <br/>
             <div className='row'>
                 <div className='card col-md-6 offset-md-3 offset-md-3'>
                     <h2 className='text-center'>Add Profile</h2>
@@ -141,9 +149,6 @@ const AddProfileComponent = () => {
                             <Link to="/skill-tracker/api/v1/admin/profiles" className="btn btn-danger mb-2">Cancel</Link> 
                             </div>
 
-                            <div className='form-group mb-2'>
-                            <Link to="/skill-tracker/api/v1/admin/profiles" className="btn btn-primary mb-2">Check Engineer</Link> 
-                            </div>
 
                             
 
